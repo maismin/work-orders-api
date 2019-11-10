@@ -1,0 +1,39 @@
+{
+  "name": "work-orders-api",
+  "version": "1.0.0",
+  "description": "A backend api to create workers and assign work orders to them",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maismin/work-orders-api.git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Si Mai",
+    "email": "maismin@gmail.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maismin/work-orders-api/issues"
+  },
+  "homepage": "https://github.com/maismin/work-orders-api#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.9"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1"
+  }
+}
