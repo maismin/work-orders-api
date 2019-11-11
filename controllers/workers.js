@@ -43,23 +43,63 @@ exports.addWorker = asyncHandler(async (req, res) => {
 
 // @desc    Update worker's name, company, and/or email
 // @route   PUT /api/v1.0/workers/:id
+// @route   PUT /api/v1.0/work-orders/:workOrderId/workers/:id
 // @access  Public
 exports.updateWorker = asyncHandler(async (req, res, next) => {
   if (req.body.workOrders) {
     delete req.body.workOrders;
   }
 
-  let worker = await Worker.findById(req.params.id);
+  const { id, workOrderId } = req.params;
+
+  let worker = await Worker.findById(id);
 
   if (!worker) {
-    return next(
-      new ErrorResponse(`Worker not found with id ${req.params.id}`, 404),
-    );
+    return next(new ErrorResponse(`Worker not found with id ${id}`, 404));
   }
 
-  worker = await Worker.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
+  if (req.body) {
+    worker = await Worker.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+  }
+
+  if (workOrderId) {
+    const workOrder = await WorkOrder.findById(workOrderId);
+
+    if (!workOrder) {
+      return next(
+        new ErrorResponse(`Work order not found with id ${workOrderId}`, 404),
+      );
+    }
+
+    // Check if worker is already added to the work order
+    if (
+      workOrder.workers.some(w => w._id.toString() === worker._id.toString()) // eslint-disable-line no-underscore-dangle
+    ) {
+      return next(
+        new ErrorResponse(
+          `Duplicate worker ${id} in work order ${workOrderId}`,
+          400,
+        ),
+      );
+    }
+
+    try {
+      workOrder.workers = workOrder.workers.concat(worker._id); // eslint-disable-line no-underscore-dangle
+      await workOrder.save();
+      worker.workOrders = worker.workOrders.concat(workOrder._id); // eslint-disable-line no-underscore-dangle
+      await worker.save();
+    } catch (error) {
+      return next(new ErrorResponse(error.message, 400));
+    }
+  }
+
+  worker = await Worker.findById(req.params.id).populate('workOrders', {
+    title: 1,
+    description: 1,
+    deadline: 1,
   });
 
   return res.status(200).json({ success: true, data: worker });

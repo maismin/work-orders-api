@@ -24,7 +24,8 @@ router
     ]),
     getWorkers,
   )
-  .post(addWorker);
+  .post(addWorker)
+  .put(updateWorker);
 
 router
   .route('/:id')

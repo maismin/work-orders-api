@@ -1,5 +1,8 @@
 const express = require('express');
 
+const Worker = require('../models/worker'); // eslint-disable-line no-unused-vars
+const WorkOrder = require('../models/work-order');
+
 const {
   getWorkOrders,
   getWorkOrder,
@@ -8,13 +11,16 @@ const {
   deleteWorkOrder,
 } = require('../controllers/work-orders');
 
-const Worker = require('../models/worker'); // eslint-disable-line no-unused-vars
-const WorkOrder = require('../models/work-order');
+// Include other resource routers
+const workersRouter = require('./workers');
 
 // Middleware
 const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router({ mergeParams: true });
+
+// Re-route into other resource routers
+router.use('/:workOrderId/workers/:id', workersRouter);
 
 router
   .route('/')
