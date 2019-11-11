@@ -16,19 +16,17 @@ const importData = async () => {
   try {
     // Read JSON files
     const workers = JSON.parse(
-      fs.readFileSync(`${__dirname}/_data/workers.json`, 'utf-8'),
+      fs.readFileSync(`${__dirname}/../_data/workers.json`, 'utf-8'),
     );
 
     const workOrders = JSON.parse(
-      fs.readFileSync(`${__dirname}/_data/work-orders.json`, 'utf-8'),
+      fs.readFileSync(`${__dirname}/../_data/work-orders.json`, 'utf-8'),
     );
 
     await Worker.create(workers);
     await WorkOrder.create(workOrders);
   } catch (error) {
     console.error(error);
-  } finally {
-    fs.closeSync();
   }
 };
 

@@ -8,11 +8,26 @@ const {
   workersInDB,
   workOrdersInDB,
 } = require('./test_helper');
+const connectDB = require('../config/database');
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
 
 const api = supertest(app);
 const endpoint = '/api/v1.0/workers';
+
+describe('getting all workers', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds', async () => {
+    const res = await api.get(endpoint).expect(200);
+
+    const workers = await workersInDB();
+    expect(res.body.data.length).toBe(workers.length);
+  });
+});
 
 describe('creating a worker', () => {
   beforeEach(async () => {
