@@ -70,3 +70,28 @@ exports.updateWorkOrder = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json({ success: true, data: workOrder });
 });
+
+// @desc    Delete work order
+// @route   DELETE /api/v1.0/work-orders/:id
+// @access  Public
+exports.deleteWorkOrder = asyncHandler(async (req, res, next) => {
+  const workOrder = await WorkOrder.findById(req.params.id);
+
+  if (!workOrder) {
+    return next(
+      new ErrorResponse(`WorkOrder not found with id ${req.params.id}`, 404),
+    );
+  }
+
+  workOrder.workers.forEach(async workerId => {
+    const worker = await Worker.findById(workerId);
+    worker.workOrders = worker.workOrders.filter(
+      w => w.toString() !== workOrder._id.toString(), // eslint-disable-line no-underscore-dangle
+    );
+    await Worker.findByIdAndUpdate(workerId, worker);
+  });
+
+  await WorkOrder.findByIdAndDelete(req.params.id);
+
+  return res.status(200).json({ sucess: true, data: {} });
+});
