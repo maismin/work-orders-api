@@ -8,7 +8,7 @@ const {
   deleteWorkOrder,
 } = require('../controllers/work-orders');
 
-const Worker = require('../models/worker');
+const Worker = require('../models/worker'); // eslint-disable-line no-unused-vars
 const WorkOrder = require('../models/work-order');
 
 // Middleware
