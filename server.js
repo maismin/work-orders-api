@@ -10,6 +10,7 @@ const express = require('express');
 
 const connectDB = require('./config/database');
 const errorHandler = require('./middleware/error');
+const mainRouter = require('./routes');
 
 // Connect to database
 connectDB();
@@ -19,9 +20,7 @@ const app = express();
 // Boder parser
 app.use(express.json());
 
-app.use('/', (req, res) => {
-  res.status(200).json({ success: true });
-});
+app.use(mainRouter);
 
 app.use(errorHandler);
 
