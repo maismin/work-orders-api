@@ -2,12 +2,7 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 
 const app = require('../app');
-const {
-  deleteData,
-  importData,
-  workersInDB,
-  workOrdersInDB,
-} = require('./test_helper');
+const { deleteData, importData, workOrdersInDB } = require('./test_helper');
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
 
@@ -150,6 +145,40 @@ describe('updating a work-order', () => {
     expect(workOrder.title).toBe(res.body.data.title);
     expect(workOrder.description).toBe(res.body.data.description);
     expect(workOrder.deadline).toStrictEqual(deadline);
+  });
+});
+
+describe('deleting a work-order', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with a valid work-order id', async () => {
+    const workerId = '5d36155a2416c70017eab937';
+    const workOrderId = '5d36175e2416c70017eab939';
+
+    const workerBeforeDeletion = await Worker.findById(workerId);
+    const workOrdersBeforeDeletion = await workOrdersInDB();
+
+    await api.delete(`${endpoint}/${workOrderId}`).expect(200);
+
+    const workerAfterDeletion = await Worker.findById(workerId);
+    const workOrdersAfterDeletion = await workOrdersInDB();
+
+    expect(workerBeforeDeletion.workOrders.length).toEqual(
+      workerAfterDeletion.workOrders.length + 1,
+    );
+    expect(workOrdersBeforeDeletion.length).toEqual(
+      workOrdersAfterDeletion.length + 1,
+    );
+  });
+
+  it('fails with an invalid work-order id', async () => {
+    const workOrderId = '5d35ed23f0db590017743b1a';
+    const res = await api.delete(`${endpoint}/${workOrderId}`).expect(404);
+
+    expect(res.body.error).toContain(`not found with id ${workOrderId}`);
   });
 });
 
