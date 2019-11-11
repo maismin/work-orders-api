@@ -36,7 +36,7 @@ exports.getWorkOrder = asyncHandler(async (req, res, next) => {
 });
 
 // @desc    Add work order
-// @route   POST /api/v1.0/work-order
+// @route   POST /api/v1.0/work-orders
 // @access  Public
 exports.addWorkOrder = asyncHandler(async (req, res) => {
   if (req.body.workers) {
