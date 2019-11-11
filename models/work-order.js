@@ -1,31 +1,38 @@
 const mongoose = require('mongoose');
 
+const options = {
+  timestamps: true,
+};
+
 const arrayLimit = arr => arr && arr.length <= 5;
 
-const workOrdersSchema = mongoose.Schema({
-  title: {
-    type: String,
-    required: [true, 'Please add a title'],
+const workOrdersSchema = mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: [true, 'Please add a title'],
+    },
+    description: {
+      type: String,
+      required: [true, 'Please add a description'],
+    },
+    deadline: {
+      type: Date,
+      min: new Date(),
+      required: [true, 'Please add a deadline'],
+    },
+    workers: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Worker',
+        },
+      ],
+      validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
+    },
   },
-  description: {
-    type: String,
-    required: [true, 'Please add a description'],
-  },
-  deadline: {
-    type: Date,
-    min: new Date(),
-    required: [true, 'Please add a deadline'],
-  },
-  workers: {
-    type: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Worker',
-      },
-    ],
-    validate: [arrayLimit, '{PATH} exceeds the limit of 5'],
-  },
-});
+  options,
+);
 
 /* eslint-disable no-underscore-dangle, no-param-reassign */
 workOrdersSchema.set('toJSON', {
