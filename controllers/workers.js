@@ -22,7 +22,7 @@ exports.getWorker = asyncHandler(async (req, res, next) => {
 
   if (!worker) {
     return next(
-      new ErrorResponse(`Worker not found with id of ${req.params.id}`, 404),
+      new ErrorResponse(`Worker not found with id ${req.params.id}`, 404),
     );
   }
 

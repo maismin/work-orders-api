@@ -51,7 +51,7 @@ describe('getting a single worker', () => {
       .expect(404);
 
     expect(res.body.error).toContain(
-      'not found with id of 5d35ea68257c1863b22501c2',
+      'not found with id 5d35ea68257c1863b22501c2',
     );
   });
 });
