@@ -124,6 +124,35 @@ describe('creating a work-order', () => {
   });
 });
 
+describe('updating a work-order', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with valid fields', async () => {
+    const workOrderId = '5d36175e2416c70017eab939';
+    const deadline = new Date(Date.now());
+    deadline.setFullYear(deadline.getFullYear() + 5);
+    const updatedWorkOrder = {
+      title: 'New Task',
+      description: 'Mystery',
+      deadline,
+    };
+
+    const res = await api
+      .put(`${endpoint}/${workOrderId}`)
+      .send(updatedWorkOrder)
+      .expect(200);
+
+    const workOrder = await WorkOrder.findById(workOrderId);
+
+    expect(workOrder.title).toBe(res.body.data.title);
+    expect(workOrder.description).toBe(res.body.data.description);
+    expect(workOrder.deadline).toStrictEqual(deadline);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
