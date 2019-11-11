@@ -6,8 +6,8 @@ const WorkOrder = require('../models/work-order');
 // @desc    Get all workers
 // @route   GET /api/v1.0/workers
 // @access  Public
-exports.getWorkers = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+exports.getWorkers = asyncHandler(async (req, res) => {
+  return res.status(200).json(res.advancedResults);
 });
 
 // @desc    Get single worker
@@ -26,15 +26,15 @@ exports.getWorker = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: worker });
+  return res.status(200).json({ success: true, data: worker });
 });
 
 // @desc    Add worker
 // @route   POST /api/v1.0/workers
 // @access  Public
-exports.addWorker = asyncHandler(async (req, res, next) => {
+exports.addWorker = asyncHandler(async (req, res) => {
   const worker = await Worker.create(req.body);
-  res.status(201).json({ success: true, data: worker });
+  return res.status(201).json({ success: true, data: worker });
 });
 
 // @desc    Update worker's name, company, and/or email
@@ -58,7 +58,7 @@ exports.updateWorker = asyncHandler(async (req, res, next) => {
     runValidators: true,
   });
 
-  res.status(200).json({ success: true, data: worker });
+  return res.status(200).json({ success: true, data: worker });
 });
 
 // @desc    Delete worker

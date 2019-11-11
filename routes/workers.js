@@ -9,7 +9,7 @@ const {
 } = require('../controllers/workers');
 
 const Worker = require('../models/worker');
-const WorkOrder = require('../models/work-order');
+const WorkOrder = require('../models/work-order'); // eslint-disable-line no-unused-vars
 
 // Middleware
 const advancedResults = require('../middleware/advancedResults');
