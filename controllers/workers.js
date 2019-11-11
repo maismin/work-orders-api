@@ -33,6 +33,10 @@ exports.getWorker = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1.0/workers
 // @access  Public
 exports.addWorker = asyncHandler(async (req, res) => {
+  if (req.body.workOrders) {
+    delete req.body.workOrders;
+  }
+
   const worker = await Worker.create(req.body);
   return res.status(201).json({ success: true, data: worker });
 });
