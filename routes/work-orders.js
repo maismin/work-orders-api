@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getWorkOrders } = require('../controllers/work-orders');
+const { getWorkOrders, getWorkOrder } = require('../controllers/work-orders');
 
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
@@ -18,5 +18,7 @@ router
     ]),
     getWorkOrders,
   );
+
+router.route('/:id').get(getWorkOrder);
 
 module.exports = router;
