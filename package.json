@@ -24,9 +24,16 @@
   "homepage": "https://github.com/maismin/work-orders-api#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.7.9"
+    "express-mongo-sanitize": "^1.3.2",
+    "express-rate-limit": "^5.0.0",
+    "helmet": "^3.21.2",
+    "hpp": "^0.2.2",
+    "mongoose": "^5.7.9",
+    "morgan": "^1.9.1",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "eslint": "^6.6.0",
