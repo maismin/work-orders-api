@@ -5,6 +5,7 @@ const {
   getWorker,
   addWorker,
   updateWorker,
+  deleteWorker,
 } = require('../controllers/workers');
 
 const Worker = require('../models/worker');
@@ -28,6 +29,7 @@ router
 router
   .route('/:id')
   .get(getWorker)
-  .put(updateWorker);
+  .put(updateWorker)
+  .delete(deleteWorker);
 
 module.exports = router;
