@@ -46,3 +46,27 @@ exports.addWorkOrder = asyncHandler(async (req, res) => {
   const workOrder = await WorkOrder.create(req.body);
   return res.status(201).json({ success: true, data: workOrder });
 });
+
+// @desc    Update work order's title, description, and/or deadline
+// @route   PUT /api/v1.0/work-orders/:id
+// @access  Public
+exports.updateWorkOrder = asyncHandler(async (req, res, next) => {
+  if (req.body.workers) {
+    delete req.body.workers;
+  }
+
+  let workOrder = await WorkOrder.findById(req.params.id);
+
+  if (!workOrder) {
+    return next(
+      new ErrorResponse(`Work order not found with id ${req.params.id}`, 404),
+    );
+  }
+
+  workOrder = await WorkOrder.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  return res.status(200).json({ success: true, data: workOrder });
+});

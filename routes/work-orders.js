@@ -4,6 +4,7 @@ const {
   getWorkOrders,
   getWorkOrder,
   addWorkOrder,
+  updateWorkOrder,
 } = require('../controllers/work-orders');
 
 const Worker = require('../models/worker');
@@ -24,6 +25,9 @@ router
   )
   .post(addWorkOrder);
 
-router.route('/:id').get(getWorkOrder);
+router
+  .route('/:id')
+  .get(getWorkOrder)
+  .put(updateWorkOrder);
 
 module.exports = router;
