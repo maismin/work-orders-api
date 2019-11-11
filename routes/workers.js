@@ -1,6 +1,11 @@
 const express = require('express');
 
-const { getWorkers, getWorker, addWorker } = require('../controllers/workers');
+const {
+  getWorkers,
+  getWorker,
+  addWorker,
+  updateWorker,
+} = require('../controllers/workers');
 
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
@@ -20,6 +25,9 @@ router
   )
   .post(addWorker);
 
-router.route('/:id').get(getWorker);
+router
+  .route('/:id')
+  .get(getWorker)
+  .put(updateWorker);
 
 module.exports = router;

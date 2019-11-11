@@ -35,3 +35,27 @@ exports.addWorker = asyncHandler(async (req, res, next) => {
   const worker = await Worker.create(req.body);
   res.status(201).json({ success: true, data: worker });
 });
+
+// @desc    Update worker's name, company, and/or email
+// @route   PUT /api/v1.0/workers/:id
+// @access  Public
+exports.updateWorker = asyncHandler(async (req, res, next) => {
+  if (req.body.workOrders) {
+    delete req.body.workOrders;
+  }
+
+  let worker = await Worker.findById(req.params.id);
+
+  if (!worker) {
+    return next(
+      new ErrorResponse(`Worker not found with id ${req.params.id}`, 404),
+    );
+  }
+
+  worker = await Worker.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({ success: true, data: worker });
+});
