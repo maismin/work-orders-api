@@ -51,6 +51,79 @@ describe('getting a single work-order', () => {
   });
 });
 
+describe('creating a work-order', () => {
+  beforeEach(async () => {
+    await deleteData();
+  });
+
+  it('succeeds with valid fields', async () => {
+    const deadline = new Date(Date.now());
+    deadline.setFullYear(deadline.getFullYear() + 5);
+    const newWorkOrder = {
+      title: 'New Task',
+      description: 'Mystery',
+      deadline,
+    };
+
+    const res = await api
+      .post(endpoint)
+      .send(newWorkOrder)
+      .expect(201);
+
+    const newWorkOrderInDB = await WorkOrder.findById(res.body.data.id);
+
+    expect(newWorkOrderInDB.title).toBe(newWorkOrder.title);
+    expect(newWorkOrderInDB.description).toBe(newWorkOrder.description);
+    expect(newWorkOrderInDB.deadline).toStrictEqual(newWorkOrder.deadline);
+  });
+
+  it('fails if title is missing', async () => {
+    const deadline = new Date(Date.now());
+    deadline.setFullYear(deadline.getFullYear() + 5);
+    const newWorkOrder = {
+      description: 'Mystery',
+      deadline,
+    };
+
+    const result = await api
+      .post(endpoint)
+      .send(newWorkOrder)
+      .expect(400);
+
+    expect(result.body.error).toContain('Please add a title');
+  });
+
+  it('fails if description is missing', async () => {
+    const deadline = new Date(Date.now());
+    deadline.setFullYear(deadline.getFullYear() + 5);
+    const newWorkOrder = {
+      title: 'New Task',
+      deadline,
+    };
+
+    const result = await api
+      .post(endpoint)
+      .send(newWorkOrder)
+      .expect(400);
+
+    expect(result.body.error).toContain('Please add a description');
+  });
+
+  it('fails if deadline is missing', async () => {
+    const newWorkOrder = {
+      title: 'New Task',
+      description: 'Mystery',
+    };
+
+    const result = await api
+      .post(endpoint)
+      .send(newWorkOrder)
+      .expect(400);
+
+    expect(result.body.error).toContain('Please add a deadline');
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
