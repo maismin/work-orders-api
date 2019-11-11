@@ -29,6 +29,33 @@ describe('getting all workers', () => {
   });
 });
 
+describe('getting a single worker', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with a valid id', async () => {
+    const res = await api
+      .get(`${endpoint}/5d35ea68257c1863b22501c1`)
+      .expect(200);
+
+    expect(res.body.data.name).toMatch('Alice');
+    expect(res.body.data.companyName).toMatch('Apple');
+    expect(res.body.data.email).toMatch('alice@apple.com');
+  });
+
+  it('fails with an invalid id', async () => {
+    const res = await api
+      .get(`${endpoint}/5d35ea68257c1863b22501c2`)
+      .expect(404);
+
+    expect(res.body.error).toContain(
+      'not found with id of 5d35ea68257c1863b22501c2',
+    );
+  });
+});
+
 describe('creating a worker', () => {
   beforeEach(async () => {
     await deleteData();
