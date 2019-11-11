@@ -64,11 +64,20 @@ $ npm run dev
 ```
 4. Use Postman to interface with the API at (http://localhost:5000)
 
-
-
-
 <!-- USAGE -->
 ## Usage
+
+### Populate Database
+
+Use the following command to initialize the database
+```bash
+$ node seeder.js -i
+```
+
+Use the following command to clean the database
+```bash
+$ node seeder.js -d
+```
 
 ### API
 
