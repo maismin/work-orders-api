@@ -2,13 +2,7 @@ const mongoose = require('mongoose');
 const supertest = require('supertest');
 
 const app = require('../app');
-const {
-  deleteData,
-  importData,
-  workersInDB,
-  workOrdersInDB,
-} = require('./test_helper');
-const connectDB = require('../config/database');
+const { deleteData, importData, workersInDB } = require('./test_helper');
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
 
