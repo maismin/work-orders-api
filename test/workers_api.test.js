@@ -146,6 +146,44 @@ describe('creating a worker', () => {
   });
 });
 
+describe('deleting a worker', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with a valid id', async () => {
+    const workersBeforeDeletion = await workersInDB();
+    const workOrderBeforeDeletion = await WorkOrder.findById(
+      '5d35ed23f0db590017743b0a',
+    );
+
+    await api.delete(`${endpoint}/5d35ea68257c1863b22501c1`).expect(200);
+
+    const workersAfterDeletion = await workersInDB();
+    const workOrderAfterDeletion = await WorkOrder.findById(
+      '5d35ed23f0db590017743b0a',
+    );
+
+    expect(workersBeforeDeletion.length).toEqual(
+      workersAfterDeletion.length + 1,
+    );
+    expect(workOrderBeforeDeletion.workers.length).toEqual(
+      workOrderAfterDeletion.workers.length + 1,
+    );
+  });
+
+  it('fails with an invalid id', async () => {
+    const res = await api
+      .delete(`${endpoint}/5d35ea68257c1863b22501c2`)
+      .expect(404);
+
+    expect(res.body.error).toContain(
+      'not found with id 5d35ea68257c1863b22501c2',
+    );
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
