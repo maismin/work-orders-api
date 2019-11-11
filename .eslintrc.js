@@ -3,8 +3,13 @@ module.exports = {
     commonjs: true,
     es6: true,
     node: true,
+    jest: true,
   },
-  extends: ['airbnb-base', 'plugin:prettier/recommended'],
+  extends: [
+    'airbnb-base',
+    'plugin:prettier/recommended',
+    'plugin:jest/recommended',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -14,5 +19,11 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
+    'jest/no-hooks': [
+      'error',
+      {
+        allow: ['afterAll', 'beforeAll', 'beforeEach'],
+      },
+    ],
   },
 };
