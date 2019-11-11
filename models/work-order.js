@@ -4,7 +4,9 @@ const options = {
   timestamps: true,
 };
 
-const arrayLimit = arr => arr && arr.length <= 5;
+const WORKER_LIMIT = 5;
+
+const arrayLimit = arr => arr && arr.length <= WORKER_LIMIT;
 
 const workOrdersSchema = mongoose.Schema(
   {
