@@ -25,10 +25,7 @@ exports.getWorkOrder = asyncHandler(async (req, res, next) => {
 
   if (!workOrder) {
     return next(
-      new ErrorResponse(
-        `Work order not found with id of ${req.params.id}`,
-        404,
-      ),
+      new ErrorResponse(`Work order not found with id ${req.params.id}`, 404),
     );
   }
 

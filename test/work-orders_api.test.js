@@ -28,6 +28,29 @@ describe('getting all work-orders', () => {
   });
 });
 
+describe('getting a single work-order', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with a valid work-order id', async () => {
+    const workOrderId = '5d35ed23f0db590017743b0a';
+    const res = await api.get(`${endpoint}/${workOrderId}`).expect(200);
+
+    expect(res.body.data.title).toMatch('T1');
+    expect(res.body.data.description).toMatch('Task1');
+    expect(res.body.data.deadline).toMatch('2021-01-01T00:00:00.000Z');
+  });
+
+  it('fails with an invalid work-order id', async () => {
+    const workOrderId = '5d35ed23f0db590017743b1a';
+    const res = await api.get(`${endpoint}/${workOrderId}`).expect(404);
+
+    expect(res.body.error).toContain(`not found with id ${workOrderId}`);
+  });
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
