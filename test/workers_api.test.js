@@ -146,6 +146,59 @@ describe('creating a worker', () => {
   });
 });
 
+describe('updating a worker', () => {
+  beforeEach(async () => {
+    await deleteData();
+    await importData();
+  });
+
+  it('succeeds with valid name, company, and email', async () => {
+    const id = '5d35eca5f0db590017743b09';
+    const updatedFields = {
+      name: 'Jack',
+      companyName: 'Outdated Tech',
+      email: 'Jack@gmail.com',
+    };
+
+    const res = await api
+      .put(`${endpoint}/${id}`)
+      .send(updatedFields)
+      .expect(200);
+
+    const worker = await Worker.findById(id);
+
+    expect(worker.name).toMatch(res.body.data.name);
+    expect(worker.companyName).toMatch(res.body.data.companyName);
+    expect(worker.email).toMatch(res.body.data.email);
+  });
+
+  it('succeeds with a valid work-order id', async () => {
+    const id = '5d35eca5f0db590017743b09';
+    const workOrderId = '5d36175e2416c70017eab939';
+
+    await api
+      .put(`/api/v1.0/work-orders/${workOrderId}/workers/${id}`)
+      .expect(200);
+
+    const worker = await Worker.findById(id);
+    const workOrder = await WorkOrder.findById(workOrderId);
+
+    expect(worker.workOrders.map(oid => oid.toString())).toContain(workOrderId);
+    expect(workOrder.workers.map(oid => oid.toString())).toContain(id);
+  });
+
+  it('fails with a valid work-order with max workers', async () => {
+    const id = '5d35eca5f0db590017743b09';
+    const workOrderId = '5d35ed23f0db590017743b0a';
+
+    const res = await api
+      .put(`/api/v1.0/work-orders/${workOrderId}/workers/${id}`)
+      .expect(400);
+
+    expect(res.body.error).toContain('workers exceeds the limit of 5');
+  });
+});
+
 describe('deleting a worker', () => {
   beforeEach(async () => {
     await deleteData();
