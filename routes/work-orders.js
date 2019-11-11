@@ -1,6 +1,10 @@
 const express = require('express');
 
-const { getWorkOrders, getWorkOrder } = require('../controllers/work-orders');
+const {
+  getWorkOrders,
+  getWorkOrder,
+  addWorkOrder,
+} = require('../controllers/work-orders');
 
 const Worker = require('../models/worker');
 const WorkOrder = require('../models/work-order');
@@ -17,7 +21,8 @@ router
       ['workers', { name: 1, companyName: 1, email: 1 }],
     ]),
     getWorkOrders,
-  );
+  )
+  .post(addWorkOrder);
 
 router.route('/:id').get(getWorkOrder);
 

@@ -34,3 +34,15 @@ exports.getWorkOrder = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json({ success: true, data: workOrder });
 });
+
+// @desc    Add work order
+// @route   POST /api/v1.0/work-order
+// @access  Public
+exports.addWorkOrder = asyncHandler(async (req, res) => {
+  if (req.body.workers) {
+    delete req.body.workers;
+  }
+
+  const workOrder = await WorkOrder.create(req.body);
+  return res.status(201).json({ success: true, data: workOrder });
+});
